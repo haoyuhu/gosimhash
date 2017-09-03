@@ -1,0 +1,14 @@
+language: go
+sudo: false
+go:
+  - tip
+before_install:
+  - go get github.com/mattn/goveralls
+script:
+  - $GOPATH/bin/goveralls -service=travis-ci
+notifications:
+  recipients:
+    - im@huhaoyu.com
+  email:
+    on_success: change
+    on_failure: always
