@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gosimhash"
+	"github.com/HaoyuHu/gosimhash"
 )
 
 var sentence = flag.String("sentence", "我来到北京清华大学", "Sentence used to be hash")
