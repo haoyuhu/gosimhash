@@ -28,7 +28,7 @@ func TestSimhashWithJenkins(t *testing.T) {
 		var actual string
 
 		expected = "1111101001011001011010100100001010111011001101011111100101000101"
-		actual = hasher.MakeSimhashString(&sentence, topN)
+		actual = hasher.MakeSimhashBinString(&sentence, topN)
 		if expected != actual {
 			t.Error(expected, "!=", actual)
 		}
@@ -53,7 +53,7 @@ func TestSimhashWithJenkins(t *testing.T) {
 	}()
 
 	func() {
-		distance := CalculateDistanceBySimhashString(
+		distance := CalculateDistanceBySimhashBinString(
 			"100000010010111001011100111100011011010001111110101101100110",
 			"100000010010111001011100111100011011010001111110101101100001")
 		if distance != 3 {
@@ -87,7 +87,7 @@ func TestSimhashWithSipHash(t *testing.T) {
 		var actual string
 
 		expected = "100000010010111001011100111100011011010001111110101101100110"
-		actual = hasher.MakeSimhashString(&sentence, topN)
+		actual = hasher.MakeSimhashBinString(&sentence, topN)
 		if expected != actual {
 			t.Error(expected, "!=", actual)
 		}
@@ -112,7 +112,7 @@ func TestSimhashWithSipHash(t *testing.T) {
 	}()
 
 	func() {
-		distance := CalculateDistanceBySimhashString(
+		distance := CalculateDistanceBySimhashBinString(
 			"100000010010111001011100111100011011010001111110101101100110",
 			"100000010010111001011100111100011011010001111110101101100001")
 		if distance != 3 {

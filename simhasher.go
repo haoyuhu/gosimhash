@@ -62,7 +62,7 @@ func (simhasher *Simhasher) MakeSimhash(doc *string, topN int) uint64 {
 	return ret
 }
 
-func (simhasher *Simhasher) MakeSimhashString(doc *string, topN int) string {
+func (simhasher *Simhasher) MakeSimhashBinString(doc *string, topN int) string {
 	simhash := simhasher.MakeSimhash(doc, topN)
 	return strconv.FormatUint(simhash, BINARY)
 }
@@ -82,7 +82,7 @@ func CalculateDistanceBySimhash(simhash uint64, another uint64) int {
 	return counter
 }
 
-func CalculateDistanceBySimhashString(simhashStr string, anotherStr string) int {
+func CalculateDistanceBySimhashBinString(simhashStr string, anotherStr string) int {
 	simhash, err := strconv.ParseUint(simhashStr, BINARY, BITS_LENGTH)
 	if err != nil {
 		fmt.Printf("Cannot convert simHashStr(%s) to uint64 simhash: %s", simhashStr, err.Error())

@@ -6,14 +6,17 @@ import (
 	"github.com/HaoyuHu/gosimhash"
 )
 
-var sentence = flag.String("sentence", "我来到北京清华大学", "Sentence used to be hash")
-var top_n = flag.Int("top_n", 5, "Top n of the words separated by jieba")
+var sentence = flag.String("sentence", "今天的天气确实适合户外运动", "Sentence for simhash")
+var topN = flag.Int("top_n", 5, "Top n of the words separated by jieba")
 
 func main() {
 	flag.Parse()
 
 	hasher := gosimhash.NewSimpleSimhasher()
 	defer hasher.Free()
-	fingerprint := hasher.MakeSimhash(sentence, *top_n)
-	fmt.Printf("%s simhash: %x\n", *sentence, fingerprint)
+	fingerprint := hasher.MakeSimhash(sentence, *topN)
+	binary := hasher.MakeSimhashBinString(sentence, *topN)
+	fmt.Printf("sentence: %s, simhash in uint64: %x\n", *sentence, fingerprint)
+	fmt.Printf("sentence: %s, simhash in binary: %s\n", *sentence, binary)
+
 }
