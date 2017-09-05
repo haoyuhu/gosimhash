@@ -24,16 +24,25 @@ func getSimhash() {
     var sentence string = "今天的天气确实适合户外运动"
     var another string = "今年的气候确实很糟糕"
     var topN int = 5
+    var limit int = 3
 
     // make simhash in uint64, like: 0xfa596a42bb35f945
     var first uint64 = hasher.MakeSimhash(&sentence, topN)
     var second uint64 = hasher.MakeSimhash(&another, topN)
-    var dist1 int = hasher.CalculateDistanceBySimhash(first, second)
+    var dist1 int = gosimhash.CalculateDistanceBySimhash(first, second)
+    var duplicated bool = gosimhash.IsSimhashDuplicated(first, second, limit)
     
     // make simhash in binary string, like: "10101110101111010101..."
     var firstStr string = hasher.MakeSimhashBinString(&sentence, topN)
     var secondStr string = hasher.MakeSimhashBinString(&another, topN)
-    var dist2 int = hasher.CalculateDistanceBySimhashBinString(firstStr, secondStr)
+    dist2, err := gosimhash.CalculateDistanceBySimhashBinString(firstStr, secondStr)
+    if err != nil {
+        fmt.Printf(err.Error())
+    }
+    duplicated, anotherErr := gosimhash.IsSimhashBinStringDuplicated(firstStr, secondStr, limit)
+    if anotherErr != nil {
+        fmt.Printf(anotherErr.Error())
+    }
 }
 ```
 
