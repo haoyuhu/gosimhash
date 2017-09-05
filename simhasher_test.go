@@ -53,9 +53,13 @@ func TestSimhashWithJenkins(t *testing.T) {
 	}()
 
 	func() {
-		distance := CalculateDistanceBySimhashBinString(
+		distance, err := CalculateDistanceBySimhashBinString(
 			"100000010010111001011100111100011011010001111110101101100110",
 			"100000010010111001011100111100011011010001111110101101100001")
+		if err != nil {
+			t.Error(err.Error())
+			return
+		}
 		if distance != 3 {
 			t.Error(distance, "!= 3")
 		}
@@ -112,11 +116,55 @@ func TestSimhashWithSipHash(t *testing.T) {
 	}()
 
 	func() {
-		distance := CalculateDistanceBySimhashBinString(
+		distance, err := CalculateDistanceBySimhashBinString(
 			"100000010010111001011100111100011011010001111110101101100110",
 			"100000010010111001011100111100011011010001111110101101100001")
-		if distance != 3 {
+		if err != nil {
+			t.Error(err.Error())
+			return
+		} else if distance != 3 {
 			t.Error(distance, "!= 3")
+		}
+
+		distance, err = CalculateDistanceBySimhashBinString(
+			"100000010010111001011100111100011011010001111110101101100113",
+			"100000010010111001011100111100011011010001111110101101100001")
+		if err == nil {
+			t.Error("Should throw error at CalculateDistanceBySimhashBinString")
+		}
+
+		distance, err = CalculateDistanceBySimhashBinString(
+			"100000010010111001011100111100011011010001111110101101100110",
+			"100000010010111001011100111100011011010001111110101101100003")
+		if err == nil {
+			t.Error("Should throw error at CalculateDistanceBySimhashBinString")
+		}
+	}()
+
+	func() {
+		duplicated := IsSimhashDuplicated(0x812e5cf1b47eb66, 0x812e5cf1b47eb61, 3)
+		if !duplicated {
+			t.Error("Should be duplicated at IsSimhashDuplicated")
+		}
+		duplicated, err := IsSimhashBinStringDuplicated(
+			"100000010010111001011100111100011011010001111110101101100110",
+			"100000010010111001011100111100011011010001111110101101100001", 3)
+		if err != nil {
+			t.Error(err.Error())
+		} else if !duplicated {
+			t.Error("Should be duplicated at IsSimhashBinStringDuplicated")
+		}
+		duplicated, err = IsSimhashBinStringDuplicated(
+			"100000010010111001011100111100011011010001111110101101100113",
+			"100000010010111001011100111100011011010001111110101101100001", 3)
+		if err == nil {
+			t.Error("Should throw error at IsSimhashBinStringDuplicated")
+		}
+		duplicated, err = IsSimhashBinStringDuplicated(
+			"100000010010111001011100111100011011010001111110101101100110",
+			"100000010010111001011100111100011011010001111110101101100003", 3)
+		if err == nil {
+			t.Error("Should throw error at IsSimhashBinStringDuplicated")
 		}
 	}()
 }
