@@ -77,21 +77,47 @@ func CalculateDistanceBySimhash(simhash uint64, another uint64) int {
 	counter := 0
 	for ; xor != 0; {
 		xor &= xor - 1
-		counter++
+		counter ++
 	}
 	return counter
 }
 
-func CalculateDistanceBySimhashBinString(simhashStr string, anotherStr string) int {
+func IsSimhashDuplicated(simhash uint64, another uint64, limit int) bool {
+	xor := simhash ^ another
+	counter := 0
+	for ; xor != 0 && counter <= limit; {
+		xor &= xor - 1
+		counter ++
+	}
+	return counter <= limit
+}
+
+func CalculateDistanceBySimhashBinString(simhashStr string, anotherStr string) (int, error) {
 	simhash, err := strconv.ParseUint(simhashStr, BINARY, BITS_LENGTH)
 	if err != nil {
-		fmt.Printf("Cannot convert simHashStr(%s) to uint64 simhash: %s", simhashStr, err.Error())
+		fmt.Printf("Cannot convert simHashStr(%s) to uint64 simhash: %s\n", simhashStr, err.Error())
+		return 0, err
 	}
 	another, err := strconv.ParseUint(anotherStr, BINARY, BITS_LENGTH)
 	if err != nil {
-		fmt.Printf("Cannot convert anotherStr(%s) to uint64 simhash: %s", anotherStr, err.Error())
+		fmt.Printf("Cannot convert anotherStr(%s) to uint64 simhash: %s\n", anotherStr, err.Error())
+		return 0, err
 	}
-	return CalculateDistanceBySimhash(simhash, another)
+	return CalculateDistanceBySimhash(simhash, another), nil
+}
+
+func IsSimhashBinStringDuplicated(simhashStr string, anotherStr string, limit int) (bool, error) {
+	simhash, err := strconv.ParseUint(simhashStr, BINARY, BITS_LENGTH)
+	if err != nil {
+		fmt.Printf("Cannot convert simHashStr(%s) to uint64 simhash: %s\n", simhashStr, err.Error())
+		return false, err
+	}
+	another, err := strconv.ParseUint(anotherStr, BINARY, BITS_LENGTH)
+	if err != nil {
+		fmt.Printf("Cannot convert anotherStr(%s) to uint64 simhash: %s\n", anotherStr, err.Error())
+		return false, err
+	}
+	return IsSimhashDuplicated(simhash, another, limit), nil
 }
 
 func (simhasher *Simhasher) convertWordWeights2HashWeights(wws []jieba.WordWeight, hws []HashWeight) {

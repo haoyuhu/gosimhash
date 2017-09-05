@@ -18,5 +18,4 @@ func main() {
 	binary := hasher.MakeSimhashBinString(sentence, *topN)
 	fmt.Printf("sentence: %s, simhash in uint64: %x\n", *sentence, fingerprint)
 	fmt.Printf("sentence: %s, simhash in binary: %s\n", *sentence, binary)
-
 }
