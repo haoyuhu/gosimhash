@@ -9,8 +9,8 @@ func TestSimhashWithJenkins(t *testing.T) {
 	hasher := NewSimpleSimhasher()
 	defer hasher.Free()
 
-	var sentence string = "我来到北京清华大学"
-	var topN int = 5
+	var sentence = "我来到北京清华大学"
+	var topN = 5
 
 	func() {
 		var expected uint64
@@ -67,13 +67,13 @@ func TestSimhashWithJenkins(t *testing.T) {
 }
 
 func TestSimhashWithSipHash(t *testing.T) {
-	sip := utils.NewSipHasher([]byte(DEFAULT_HASH_KEY))
+	sip := utils.NewSipHasher([]byte(DefaultHashKey))
 	hasher := NewSimhasher(sip, "./dict/jieba.dict.utf8", "./dict/hmm_model.utf8", "",
 		"./dict/idf.utf8", "./dict/stop_words.utf8")
 	defer hasher.Free()
 
-	var sentence string = "我来到北京清华大学"
-	var topN int = 5
+	var sentence = "我来到北京清华大学"
+	var topN = 5
 
 	func() {
 		var expected uint64

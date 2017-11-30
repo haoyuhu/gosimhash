@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	BITS_LENGTH            int    = 64
-	BINARY                 int    = 2
-	DEFAULT_HASH_KEY       string = "8b6555d0c9cff7a9"
-	DEFAULT_THRESHOLD_DIST int    = 3
+	BitsLength           = 64
+	Binary               = 2
+	DefaultHashKey       = "8b6555d0c9cff7a9"
+	DefaultThresholdDist = 3
 )
 
 type Simhasher struct {
@@ -41,11 +41,11 @@ func (simhasher *Simhasher) MakeSimhash(doc *string, topN int) uint64 {
 	size := len(wws)
 	hws := make([]HashWeight, size, size)
 	simhasher.convertWordWeights2HashWeights(wws, hws)
-	var vector [BITS_LENGTH]float64
+	var vector [BitsLength]float64
 	var one uint64 = 1
 	for _, hw := range hws {
 
-		for i := 0; i < BITS_LENGTH; i++ {
+		for i := 0; i < BitsLength; i++ {
 			if ((one << uint(i)) & hw.hash) > 0 {
 				vector[i] += hw.weight
 			} else {
@@ -54,7 +54,7 @@ func (simhasher *Simhasher) MakeSimhash(doc *string, topN int) uint64 {
 		}
 	}
 	var ret uint64 = 0
-	for i := 0; i < BITS_LENGTH; i++ {
+	for i := 0; i < BitsLength; i++ {
 		if vector[i] > 0.0 {
 			ret |= one << uint(i)
 		}
@@ -64,7 +64,7 @@ func (simhasher *Simhasher) MakeSimhash(doc *string, topN int) uint64 {
 
 func (simhasher *Simhasher) MakeSimhashBinString(doc *string, topN int) string {
 	simhash := simhasher.MakeSimhash(doc, topN)
-	return strconv.FormatUint(simhash, BINARY)
+	return strconv.FormatUint(simhash, Binary)
 }
 
 func (simhasher *Simhasher) Free() {
@@ -93,12 +93,12 @@ func IsSimhashDuplicated(simhash uint64, another uint64, limit int) bool {
 }
 
 func CalculateDistanceBySimhashBinString(simhashStr string, anotherStr string) (int, error) {
-	simhash, err := strconv.ParseUint(simhashStr, BINARY, BITS_LENGTH)
+	simhash, err := strconv.ParseUint(simhashStr, Binary, BitsLength)
 	if err != nil {
 		fmt.Printf("Cannot convert simHashStr(%s) to uint64 simhash: %s\n", simhashStr, err.Error())
 		return 0, err
 	}
-	another, err := strconv.ParseUint(anotherStr, BINARY, BITS_LENGTH)
+	another, err := strconv.ParseUint(anotherStr, Binary, BitsLength)
 	if err != nil {
 		fmt.Printf("Cannot convert anotherStr(%s) to uint64 simhash: %s\n", anotherStr, err.Error())
 		return 0, err
@@ -107,12 +107,12 @@ func CalculateDistanceBySimhashBinString(simhashStr string, anotherStr string) (
 }
 
 func IsSimhashBinStringDuplicated(simhashStr string, anotherStr string, limit int) (bool, error) {
-	simhash, err := strconv.ParseUint(simhashStr, BINARY, BITS_LENGTH)
+	simhash, err := strconv.ParseUint(simhashStr, Binary, BitsLength)
 	if err != nil {
 		fmt.Printf("Cannot convert simHashStr(%s) to uint64 simhash: %s\n", simhashStr, err.Error())
 		return false, err
 	}
-	another, err := strconv.ParseUint(anotherStr, BINARY, BITS_LENGTH)
+	another, err := strconv.ParseUint(anotherStr, Binary, BitsLength)
 	if err != nil {
 		fmt.Printf("Cannot convert anotherStr(%s) to uint64 simhash: %s\n", anotherStr, err.Error())
 		return false, err
